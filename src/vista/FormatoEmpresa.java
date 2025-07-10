@@ -28,24 +28,24 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
+        txtNoEmpresa = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
+        txtDireccion = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnAnadir = new javax.swing.JButton();
+        btnDescartar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jTextField6 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        txtBuscar = new javax.swing.JTextField();
+        btnOrden = new javax.swing.JButton();
+        btnFiltro = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         jButton6.setText("Orden");
@@ -61,11 +61,26 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(0, 32, 96));
         jLabel1.setOpaque(true);
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 50));
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, 690, 40));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 690, 40));
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 690, 40));
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 690, 40));
-        jPanel1.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, 690, 40));
+
+        txtCorreo.setBackground(new java.awt.Color(255, 255, 255));
+        txtCorreo.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtCorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 280, 690, 40));
+
+        txtNoEmpresa.setBackground(new java.awt.Color(255, 255, 255));
+        txtNoEmpresa.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtNoEmpresa, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, 690, 40));
+
+        txtNombre.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombre.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 690, 40));
+
+        txtDireccion.setBackground(new java.awt.Color(255, 255, 255));
+        txtDireccion.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 690, 40));
+
+        txtTelefono.setBackground(new java.awt.Color(255, 255, 255));
+        txtTelefono.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 230, 690, 40));
 
         jLabel20.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(0, 0, 0));
@@ -92,18 +107,18 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         jLabel24.setText("Telefono");
         jPanel1.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, 80, 40));
 
-        jButton1.setText("Añadir");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 350, 90, -1));
+        btnAnadir.setText("Añadir");
+        jPanel1.add(btnAnadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 350, 90, -1));
 
-        jButton2.setText("Descartar");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 350, 100, -1));
+        btnDescartar.setText("Descartar");
+        jPanel1.add(btnDescartar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 350, 100, -1));
 
-        jButton3.setBackground(new java.awt.Color(0, 176, 80));
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Guardar");
-        jButton3.setContentAreaFilled(false);
-        jButton3.setOpaque(true);
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 350, 110, -1));
+        btnGuardar.setBackground(new java.awt.Color(0, 176, 80));
+        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setText("Guardar");
+        btnGuardar.setContentAreaFilled(false);
+        btnGuardar.setOpaque(true);
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 350, 110, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -119,13 +134,16 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 530, 870, 140));
-        jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 500, 220, -1));
 
-        jButton4.setText("Orden");
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 500, 100, -1));
+        txtBuscar.setBackground(new java.awt.Color(255, 255, 255));
+        txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 500, 220, -1));
 
-        jButton5.setText("Filtro 1");
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 500, 100, -1));
+        btnOrden.setText("Orden");
+        jPanel1.add(btnOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 500, 100, -1));
+
+        btnFiltro.setText("Filtro 1");
+        jPanel1.add(btnFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 500, 100, -1));
 
         jLabel3.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -152,28 +170,28 @@ public class FormatoEmpresa extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    public javax.swing.JButton btnAnadir;
+    public javax.swing.JButton btnDescartar;
+    public javax.swing.JButton btnFiltro;
+    public javax.swing.JButton btnGuardar;
+    public javax.swing.JButton btnOrden;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    public javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel3;
+    public javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
+    public javax.swing.JTable jTable1;
+    public javax.swing.JTextField txtBuscar;
+    public javax.swing.JTextField txtCorreo;
+    public javax.swing.JTextField txtDireccion;
+    public javax.swing.JTextField txtNoEmpresa;
+    public javax.swing.JTextField txtNombre;
+    public javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }
