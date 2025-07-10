@@ -75,6 +75,9 @@ public class ConsultaEmpresa extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, 870, 380));
+
+        jTextField6.setBackground(new java.awt.Color(255, 255, 255));
+        jTextField6.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 220, -1));
 
         jButton4.setText("Orden");

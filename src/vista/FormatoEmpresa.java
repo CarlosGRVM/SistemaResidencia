@@ -99,7 +99,10 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 350, 100, -1));
 
         jButton3.setBackground(new java.awt.Color(0, 176, 80));
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Guardar");
+        jButton3.setContentAreaFilled(false);
+        jButton3.setOpaque(true);
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 350, 110, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(

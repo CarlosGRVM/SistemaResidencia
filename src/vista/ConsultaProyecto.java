@@ -56,6 +56,9 @@ public class ConsultaProyecto extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(0, 32, 96));
         jLabel1.setOpaque(true);
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 50));
+
+        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
+        jTextField2.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 80, 570, 40));
 
         jLabel21.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
