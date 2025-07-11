@@ -34,7 +34,7 @@ public class Empresa {
     }
 
     public Empresa() {
-
+        this.conexion = ConexionSQL.conectar();
     }
 
     public int getId_empresa() {
@@ -83,22 +83,22 @@ public class Empresa {
     }
 
     //METODOS DE LA BASE DE DATOS(CRUD)
-    private boolean insertarEmpresa() {
+    public boolean insertarEmpresa(Empresa empresa) {
         String sql = "INSERT into empresa (id_empresa, nombre, direccion, telefono, correo)"
-                + "VALUES (?,?,?,?,?)";
+                + " VALUES (?,?,?,?,?)";
 
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setInt(1, getId_empresa());
-            stmt.setString(2, getNombre());
-            stmt.setString(3, getDireccion());
-            stmt.setString(4, getTelefono());
-            stmt.setString(5, getCorreo());
+            stmt.setInt(1, empresa.getId_empresa());
+            stmt.setString(2, empresa.getNombre());
+            stmt.setString(3, empresa.getDireccion());
+            stmt.setString(4, empresa.getTelefono());
+            stmt.setString(5, empresa.getCorreo());
 
             stmt.executeUpdate();
             return true;
 
         } catch (SQLException e) {
-            System.err.println("Error al insertar usuario: " + e.getMessage());
+            System.err.println("Error al insertar empresa: " + e.getMessage());
             return false;
         }
     }
@@ -112,8 +112,11 @@ public class Empresa {
                 Empresa empresa = new Empresa();
                 empresa.setId_empresa(rs.getInt("id_empresa"));
                 empresa.setNombre(rs.getString("Nombre"));
+                empresa.setDireccion(rs.getString("Direccion"));
                 empresa.setTelefono(rs.getString("Telefono"));
+                empresa.setCorreo(rs.getString("Correo"));
 
+                empresas.add(empresa);
             }
         } catch (SQLException e) {
             System.err.println("⚠️ Error al obtener usuarios: " + e.getMessage());

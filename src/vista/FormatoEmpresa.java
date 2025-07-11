@@ -26,7 +26,7 @@ public class FormatoEmpresa extends javax.swing.JFrame {
 
         jButton6 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        lblRegresar = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
         txtNoEmpresa = new javax.swing.JTextField();
@@ -46,7 +46,8 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         txtBuscar = new javax.swing.JTextField();
         btnOrden = new javax.swing.JButton();
         btnFiltro = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
+        lblContador = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         jButton6.setText("Orden");
 
@@ -55,8 +56,8 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/atras.png"))); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        lblRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/flecha-izquierda.png"))); // NOI18N
+        jPanel1.add(lblRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jLabel1.setBackground(new java.awt.Color(0, 32, 96));
         jLabel1.setOpaque(true);
@@ -107,30 +108,32 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         jLabel24.setText("Telefono");
         jPanel1.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, 80, 40));
 
-        btnAnadir.setText("Añadir");
-        jPanel1.add(btnAnadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 350, 90, -1));
+        btnAnadir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/agregar-boton.png"))); // NOI18N
+        btnAnadir.setContentAreaFilled(false);
+        jPanel1.add(btnAnadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 90, -1));
 
-        btnDescartar.setText("Descartar");
-        jPanel1.add(btnDescartar, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 350, 100, -1));
+        btnDescartar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/circulo.png"))); // NOI18N
+        btnDescartar.setContentAreaFilled(false);
+        jPanel1.add(btnDescartar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 330, 100, -1));
 
         btnGuardar.setBackground(new java.awt.Color(0, 176, 80));
         btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
-        btnGuardar.setText("Guardar");
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/descargar.png"))); // NOI18N
         btnGuardar.setContentAreaFilled(false);
-        btnGuardar.setOpaque(true);
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 350, 110, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 330, 110, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
+        jTable1.setOpaque(false);
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 530, 870, 140));
@@ -139,16 +142,22 @@ public class FormatoEmpresa extends javax.swing.JFrame {
         txtBuscar.setForeground(new java.awt.Color(0, 0, 0));
         jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 500, 220, -1));
 
-        btnOrden.setText("Orden");
-        jPanel1.add(btnOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 500, 100, -1));
+        btnOrden.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/ordenar.png"))); // NOI18N
+        btnOrden.setText("Ascendente");
+        jPanel1.add(btnOrden, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 490, 160, -1));
 
-        btnFiltro.setText("Filtro 1");
-        jPanel1.add(btnFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 500, 100, -1));
+        btnFiltro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/filtrar.png"))); // NOI18N
+        btnFiltro.setText("Numero");
+        jPanel1.add(btnFiltro, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 490, 150, -1));
 
-        jLabel3.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Empresas registradas:\n 0 / 0");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(697, 493, 230, 40));
+        lblContador.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        lblContador.setForeground(new java.awt.Color(0, 0, 0));
+        lblContador.setText("Empresas registradas:  0");
+        jPanel1.add(lblContador, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 490, 200, 40));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/lupa.png"))); // NOI18N
+        jLabel4.setText("\n");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 500, 30, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -177,16 +186,17 @@ public class FormatoEmpresa extends javax.swing.JFrame {
     public javax.swing.JButton btnOrden;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
-    public javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    public javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTable jTable1;
+    public javax.swing.JLabel lblContador;
+    public javax.swing.JLabel lblRegresar;
     public javax.swing.JTextField txtBuscar;
     public javax.swing.JTextField txtCorreo;
     public javax.swing.JTextField txtDireccion;

@@ -9,30 +9,32 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import vista.*;
-import modelo.*;
+import modelo.Empresa;
+import modelo.Proyecto;
+import vista.FormatoProyecto;
 
 /**
  *
  * @author carlo
  */
-public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
+public class CProyecto implements ActionListener, DocumentListener, KeyListener {
 
-    private FormatoEmpresa vista;
-    private Empresa empresa;
+    private FormatoProyecto vista;
+    private Proyecto proyecto;
     private String categoriaOrden = "clave";
     private boolean ordenAscendente = true;
-    private List<Empresa> empresasTemporales = new ArrayList<>();
+    private List<Proyecto> proyectosTemporales = new ArrayList<>();
 
-    public CEmpresa(FormatoEmpresa vista, Empresa empresa) {
+    public CProyecto(FormatoProyecto vista, Proyecto empresa) {
 
         this.vista = vista;
-        this.empresa = empresa;
+        this.proyecto = empresa;
 
         iniciarComponentes();
         configurarListener();
@@ -63,22 +65,6 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        Object src = e.getSource();
-        if (src == vista.txtTelefono) {
-            char c = e.getKeyChar();
-            if (!Character.isDigit(c) || vista.txtTelefono.getText().length() >= 10) {
-                e.consume(); // Bloquea el carácter
-            }
-        } else if (src == vista.txtNoEmpresa) {
-            char c = e.getKeyChar();
-            if (!Character.isDigit(c) || vista.txtNoEmpresa.getText().length() >= 10) {
-                e.consume(); // Bloquea el carácter
-            }
-        }
-    }
-
-    @Override
     public void insertUpdate(DocumentEvent e) {
 
         buscarEmpresa(vista.txtBuscar.getText());
@@ -101,11 +87,11 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
     }
 
     private void validarCampos() {
-        if (!vista.txtNoEmpresa.getText().trim().isEmpty()
-                && !vista.txtNombre.getText().trim().isEmpty()
-                && !vista.txtDireccion.getText().trim().isEmpty()
-                && !vista.txtTelefono.getText().trim().isEmpty()
-                && !vista.txtCorreo.getText().trim().isEmpty()) {
+        if (!vista.txtNoProyecto.getText().trim().isEmpty()
+                && !vista.txtTitulo.getText().trim().isEmpty()
+                && !vista.txtDescripcion.getText().trim().isEmpty()
+                && !vista.txtCandidatos.getText().trim().isEmpty()
+                && !vista.txtEmpresa.getText().trim().isEmpty()) {
 
             vista.btnAnadir.setEnabled(true);
         } else {
@@ -114,49 +100,40 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
 
     }
 
-    private Empresa ingresarEmpresaFormulario() {
+   private Proyecto ingresarProyectoFormulario() {
+    Proyecto proyecto = new Proyecto();
 
+    try {
+        proyecto.setId_priyecto(Integer.parseInt(vista.txtNoProyecto.getText().trim()));
+        proyecto.setTitulo(vista.txtTitulo.getText().trim());
+        proyecto.setDescripcion(vista.txtDescripcion.getText().trim());
+        proyecto.setEspacios(Integer.parseInt(vista.txtCandidatos.getText().trim()));
+
+        // Crear una sola empresa con el nombre ingresado en el campo txtEmpresa
         Empresa empresa = new Empresa();
-        empresa.setId_empresa(Integer.parseInt(vista.txtNoEmpresa.getText().trim()));
-        empresa.setNombre(vista.txtNombre.getText().trim());
-        empresa.setDireccion(vista.txtDireccion.getText().trim());
-        empresa.setTelefono(vista.txtTelefono.getText().trim());
-        empresa.setCorreo(vista.txtCorreo.getText().trim());
+        empresa.setNombre(vista.txtEmpresa.getText().trim());
 
-        return empresa;
+        // Asignar el arreglo con una sola empresa al proyecto
+        proyecto.setEmpresa(new Empresa[]{empresa});
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(vista, "Por favor ingresa valores numéricos válidos.");
+        return null;
     }
+
+    return proyecto;
+}
+
 
     private void iniciarComponentes() {
         vista.btnAnadir.setEnabled(false);
         vista.btnDescartar.setEnabled(false);
         vista.btnGuardar.setEnabled(false);
 
-        String[] columnas = {"No. empresa", "Nombre", "Direccion", "Telefono", "Correo"};
+        String[] columnas = {"No. proyecto", "Empresa", "Titulo", "Descripcion", "Espacio"};
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
         vista.jTable1.setModel(modelo);
 
         vista.btnOrden.setText("Ascendente");
-    }
-
-    private void consultar() {
-        List<Empresa> empresa = this.empresa.obtenerTodos();
-        llenarTablaEmpresa(empresa);
-    }
-
-    private void llenarTablaEmpresa(List<Empresa> empresas) {
-        String[] columnas = {"No. empresa", "Nombre", "Direccion", "Telefono", "Correo"};
-        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
-
-        for (Empresa e : empresas) {
-            modelo.addRow(new Object[]{
-                e.getId_empresa(), e.getNombre(), e.getDireccion(), e.getTelefono(),
-                e.getCorreo()
-            });
-        }
-
-        vista.jTable1.setModel(modelo);
-        vista.jTable1.setVisible(true);
-
     }
 
     private void configurarListener() {
@@ -166,14 +143,13 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
         vista.btnFiltro.addActionListener(this);
         vista.btnOrden.addActionListener(this);
 
-        vista.txtNoEmpresa.addKeyListener(this);
-        vista.txtTelefono.addKeyListener(this);
+        vista.txtNoProyecto.addKeyListener(this);
 
-        vista.txtNoEmpresa.getDocument().addDocumentListener(this);
-        vista.txtNombre.getDocument().addDocumentListener(this);
-        vista.txtDireccion.getDocument().addDocumentListener(this);
-        vista.txtTelefono.getDocument().addDocumentListener(this);
-        vista.txtCorreo.getDocument().addDocumentListener(this);
+        vista.txtNoProyecto.getDocument().addDocumentListener(this);
+        vista.txtEmpresa.getDocument().addDocumentListener(this);
+        vista.txtTitulo.getDocument().addDocumentListener(this);
+        vista.txtDescripcion.getDocument().addDocumentListener(this);
+        vista.txtCandidatos.getDocument().addDocumentListener(this);
         vista.txtBuscar.getDocument().addDocumentListener(this);
 
         vista.jTable1.getSelectionModel().addListSelectionListener(e -> {
@@ -190,12 +166,23 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
 
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+        Object src = e.getSource();
+        if (src == vista.txtNoProyecto) {
+            char c = e.getKeyChar();
+            if (!Character.isDigit(c) || vista.txtNoProyecto.getText().length() >= 10) {
+                e.consume(); // Bloquea el carácter
+            }
+        }
+    }
+
     private void limpiarCampos() {
-        vista.txtNoEmpresa.setText("");
-        vista.txtNombre.setText("");
-        vista.txtDireccion.setText("");
-        vista.txtTelefono.setText("");
-        vista.txtCorreo.setText("");
+        vista.txtNoProyecto.setText("");
+        vista.txtEmpresa.setText("");
+        vista.txtTitulo.setText("");
+        vista.txtDescripcion.setText("");
+        vista.txtCandidatos.setText("");
     }
 
     private void limpiarTabla() {
@@ -208,7 +195,7 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
     }
 
     private void cambiarCategoria() {
-        String[] categorias = {"clave", "nombre", "direccion", "telefono", "correo"};
+        String[] categorias = {"Clave", "Empresa", "Titulo", "Espacios"};
         String actual = categoriaOrden.toLowerCase();
         int index = java.util.Arrays.asList(categorias).indexOf(actual);
         int siguiente = (index + 1) % categorias.length;
@@ -220,77 +207,76 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
     }
 
     private void filtrarYOrdenar() {
-        List<Empresa> datosTabla = obtenerEmpresasDeTabla();
-        List<Empresa> ordenadas;
+        List<Proyecto> datosTabla = obtenerProyectosDeTabla();
+        List<Proyecto> ordenadas;
 
         switch (categoriaOrden.toLowerCase()) {
             case "clave" ->
                 ordenadas = datosTabla.stream()
                         .sorted((a, b) -> ordenAscendente
-                        ? Integer.compare(a.getId_empresa(), b.getId_empresa())
-                        : Integer.compare(b.getId_empresa(), a.getId_empresa()))
+                        ? Integer.compare(a.getId_priyecto(), b.getId_priyecto())
+                        : Integer.compare(b.getId_priyecto(), a.getId_priyecto()))
                         .toList();
-            case "nombre" ->
+            case "empresa" ->
                 ordenadas = datosTabla.stream()
                         .sorted((a, b) -> ordenAscendente
-                        ? a.getNombre().compareToIgnoreCase(b.getNombre())
-                        : b.getNombre().compareToIgnoreCase(a.getNombre()))
+                        ? Arrays.toString(a.getEmpresa()).compareToIgnoreCase(Arrays.toString(b.getEmpresa()))
+                        : Arrays.toString(b.getEmpresa()).compareToIgnoreCase(Arrays.toString(a.getEmpresa())))
                         .toList();
-            case "direccion" ->
+            case "titulo" ->
                 ordenadas = datosTabla.stream()
                         .sorted((a, b) -> ordenAscendente
-                        ? a.getDireccion().compareToIgnoreCase(b.getDireccion())
-                        : b.getDireccion().compareToIgnoreCase(a.getDireccion()))
+                        ? a.getTitulo().compareToIgnoreCase(b.getTitulo())
+                        : b.getTitulo().compareToIgnoreCase(a.getTitulo()))
                         .toList();
-            case "telefono" ->
+            case "espacios" ->
                 ordenadas = datosTabla.stream()
                         .sorted((a, b) -> ordenAscendente
-                        ? a.getTelefono().compareToIgnoreCase(b.getTelefono())
-                        : b.getTelefono().compareToIgnoreCase(a.getTelefono()))
-                        .toList();
-            case "correo" ->
-                ordenadas = datosTabla.stream()
-                        .sorted((a, b) -> ordenAscendente
-                        ? a.getCorreo().compareToIgnoreCase(b.getCorreo())
-                        : b.getCorreo().compareToIgnoreCase(a.getCorreo()))
+                        ? Integer.compare(a.getEspacios(), b.getEspacios())
+                        : Integer.compare(b.getEspacios(), a.getEspacios()))
                         .toList();
             default ->
                 ordenadas = datosTabla;
         }
 
-        llenarTablaEmpresa(ordenadas);
+        llenarTablaProyecto(ordenadas); // Usa el método correcto para llenar
     }
 
-    private List<Empresa> obtenerEmpresasDeTabla() {
+    private List<Proyecto> obtenerProyectosDeTabla() {
         DefaultTableModel modelo = (DefaultTableModel) vista.jTable1.getModel();
-        List<Empresa> empresas = new ArrayList<>();
+        List<Proyecto> proyectos = new ArrayList<>();
 
         for (int i = 0; i < modelo.getRowCount(); i++) {
+            Proyecto pro = new Proyecto();
+            pro.setId_priyecto(Integer.parseInt(modelo.getValueAt(i, 0).toString()));
+
+            // El campo empresa es un arreglo, aquí solo lo parseamos como texto
             Empresa emp = new Empresa();
-            emp.setId_empresa(Integer.parseInt(modelo.getValueAt(i, 0).toString()));
             emp.setNombre(modelo.getValueAt(i, 1).toString());
-            emp.setDireccion(modelo.getValueAt(i, 2).toString());
-            emp.setTelefono(modelo.getValueAt(i, 3).toString());
-            emp.setCorreo(modelo.getValueAt(i, 4).toString());
-            empresas.add(emp);
+            pro.setEmpresa(new Empresa[]{emp}); // Se guarda como arreglo
+
+            pro.setTitulo(modelo.getValueAt(i, 2).toString());
+            pro.setDescripcion(modelo.getValueAt(i, 3).toString());
+            pro.setEspacios(Integer.parseInt(modelo.getValueAt(i, 4).toString()));
+            proyectos.add(pro);
         }
 
-        return empresas;
+        return proyectos;
     }
 
     private void agregarTabla() {
-        Empresa empresa = ingresarEmpresaFormulario();
+        Proyecto proyecto = ingresarProyectoFormulario();
 
         DefaultTableModel modelo = (DefaultTableModel) vista.jTable1.getModel();
         modelo.addRow(new Object[]{
-            empresa.getId_empresa(),
-            empresa.getNombre(),
-            empresa.getDireccion(),
-            empresa.getTelefono(),
-            empresa.getCorreo()
+            proyecto.getId_priyecto(),
+            proyecto.getTitulo(),
+            proyecto.getDescripcion(),
+            proyecto.getEspacios(),
+            proyecto.getEmpresa()
         });
 
-        empresasTemporales.add(empresa); // ← Aquí la agregas a la lista
+        proyectosTemporales.add(proyecto); // ← Aquí la agregas a la lista
 
         limpiarCampos();
         vista.btnAnadir.setEnabled(false);
@@ -317,7 +303,7 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
             emp.setTelefono(modelo.getValueAt(i, 3).toString());
             emp.setCorreo(modelo.getValueAt(i, 4).toString());
 
-            if (!empresa.insertarEmpresa(emp)) {
+            if (!proyecto.insertarProyecto()) {
                 exitoTotal = false;
             }
         }
@@ -329,7 +315,7 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
         }
 
         limpiarTabla(); // Limpia la tabla local para futuras cargas
-        empresasTemporales.clear(); // Limpia la lista temporal
+        proyectosTemporales.clear(); // Limpia la lista temporal
 
     }
 
@@ -337,8 +323,8 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
         int filaSeleccionada = vista.jTable1.getSelectedRow();
 
         if (filaSeleccionada != -1) {
-            Empresa emp = empresasTemporales.get(filaSeleccionada);
-            empresasTemporales.remove(emp); // ← Quitar de la lista también
+            Proyecto pro = proyectosTemporales.get(filaSeleccionada);
+            proyectosTemporales.remove(pro); // ← Quitar de la lista también
 
             DefaultTableModel modelo = (DefaultTableModel) vista.jTable1.getModel();
             modelo.removeRow(filaSeleccionada);
@@ -353,23 +339,40 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
     }
 
     private void buscarEmpresa(String texto) {
-        List<Empresa> filtradas;
+        List<Proyecto> filtradas;
 
         if (texto.trim().isEmpty()) {
-            filtradas = new ArrayList<>(empresasTemporales);
+            filtradas = new ArrayList<>(proyectosTemporales);
         } else {
-            filtradas = empresasTemporales.stream()
-                    .filter(emp
-                            -> String.valueOf(emp.getId_empresa()).contains(texto)
-                    || emp.getNombre().toLowerCase().contains(texto.toLowerCase())
-                    || emp.getDireccion().toLowerCase().contains(texto.toLowerCase())
-                    || emp.getTelefono().contains(texto)
-                    || emp.getCorreo().toLowerCase().contains(texto.toLowerCase())
+            filtradas = proyectosTemporales.stream()
+                    .filter(pro
+                            -> String.valueOf(pro.getId_priyecto()).contains(texto)
+                    || pro.getTitulo().toLowerCase().contains(texto.toLowerCase())
+                    || pro.getDescripcion().toLowerCase().contains(texto.toLowerCase())
+                    || String.valueOf(pro.getEspacios()).contains(texto)
+                    || Arrays.toString(pro.getEmpresa()).toLowerCase().contains(texto.toLowerCase())
                     )
                     .toList();
         }
 
-        llenarTablaEmpresa(filtradas);
+        llenarTablaProyecto(filtradas); // <- Este método lo definimos abajo
+    }
+
+    private void llenarTablaProyecto(List<Proyecto> lista) {
+        String[] columnas = {"No. proyecto", "Empresa", "Título", "Descripción", "Espacios"};
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
+
+        for (Proyecto p : lista) {
+            modelo.addRow(new Object[]{
+                p.getId_priyecto(),
+                Arrays.toString(p.getEmpresa()),
+                p.getTitulo(),
+                p.getDescripcion(),
+                p.getEspacios()
+            });
+        }
+
+        vista.jTable1.setModel(modelo);
     }
 
     private void actualizarContador() {
@@ -386,5 +389,4 @@ public class CEmpresa implements ActionListener, KeyListener, DocumentListener {
     public void keyReleased(KeyEvent e) {
 
     }
-
 }

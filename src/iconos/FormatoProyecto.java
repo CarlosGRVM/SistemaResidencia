@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package vista;
+package iconos;
 
-import iconos.*;
 import vista.*;
 
 /**
@@ -186,10 +185,10 @@ public class FormatoProyecto extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAnadir;
-    private javax.swing.JButton btnDescartar;
+    public javax.swing.JButton btnAnadir;
+    public javax.swing.JButton btnDescartar;
     public javax.swing.JButton btnFiltro;
-    private javax.swing.JButton btnGuardar;
+    public javax.swing.JButton btnGuardar;
     public javax.swing.JButton btnOrden;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
