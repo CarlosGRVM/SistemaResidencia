@@ -1,49 +1,44 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import modelo.ConexionSQL;
-/**
- *
- * @author carlo
- */
+import java.util.List;
+
 public class Proyecto {
-    
-    private int id_priyecto;
+
+    private int id_proyecto;
     private String titulo;
     private String descripcion;
     private int espacios;
     private String disponible;
     private String tipo;
-    private Empresa [] empresa;
+    private Empresa[] empresas;
+    private Connection conexion;
 
-    public Proyecto(int id_priyecto, String titulo, String descripcion, int espacios, String disponible, String tipo, Empresa[] empresa) {
-        this.id_priyecto = id_priyecto;
+    public Proyecto(int id_proyecto, String titulo, String descripcion, int espacios, String disponible, String tipo, Empresa[] empresas) {
+        this.id_proyecto = id_proyecto;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.espacios = espacios;
         this.disponible = disponible;
         this.tipo = tipo;
-        this.empresa = empresa;
+        this.empresas = empresas;
+        this.conexion = ConexionSQL.conectar();
     }
 
     public Proyecto() {
-        
-    }
-    
-    
-
-    public int getId_priyecto() {
-        return id_priyecto;
+        this.conexion = ConexionSQL.conectar();
     }
 
-    public void setId_priyecto(int id_priyecto) {
-        this.id_priyecto = id_priyecto;
+    // Getters y Setters
+    public int getId_proyecto() {
+        return id_proyecto;
+    }
+
+    public void setId_proyecto(int id_proyecto) {
+        this.id_proyecto = id_proyecto;
     }
 
     public String getTitulo() {
@@ -86,49 +81,152 @@ public class Proyecto {
         this.tipo = tipo;
     }
 
-    public Empresa[] getEmpresa() {
-        return empresa;
+    public Empresa[] getEmpresas() {
+        return empresas;
     }
 
-    public void setEmpresa(Empresa[] empresa) {
-        this.empresa = empresa;
+    public void setEmpresas(Empresa[] empresas) {
+        this.empresas = empresas;
+    }
+
+    public Connection getConexion() {
+        return conexion;
     }
 
     @Override
     public String toString() {
-        return "Proyecto{" + "id_priyecto=" + id_priyecto + ", titulo=" + titulo + ", descripcion=" + descripcion + ", espacios=" + espacios + ", disponible=" + disponible + ", tipo=" + tipo + ", empresa=" + empresa + '}';
+        return "Proyecto{" + "id_proyecto=" + id_proyecto + ", titulo=" + titulo + ", descripcion=" + descripcion + ", espacios=" + espacios + ", disponible=" + disponible + ", tipo=" + tipo + ", empresas=" + empresas + '}';
     }
-    
-    
-    public boolean insertarProyecto() {
-    Connection conn = null;
-    PreparedStatement stmt = null;
 
-    try {
-        conn = ConexionSQL.conectar(); // ← Asegúrate que esta clase/método existe
-        String sql = "INSERT INTO proyecto (id_proyecto, titulo, descripcion, espacios, disponible, tipo) VALUES (?, ?, ?, ?, ?, ?)";
-        stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, this.id_priyecto);
-        stmt.setString(2, this.titulo);
-        stmt.setString(3, this.descripcion);
-        stmt.setInt(4, this.espacios);
-        stmt.setString(5, this.disponible != null ? this.disponible : "Sí");
-        stmt.setString(6, this.tipo != null ? this.tipo : "N/R");
-
-        int filas = stmt.executeUpdate();
-        return filas > 0;
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-    } finally {
-        try {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+    private void asegurarConexion() throws SQLException {
+        if (conexion == null || conexion.isClosed()) {
+            conexion = ConexionSQL.conectar();
         }
     }
+
+    public int generarSiguienteId() {
+        int id = 1;
+        try {
+            asegurarConexion();
+            String sql = "SELECT COUNT(*) FROM proyecto WHERE id_proyecto = ?";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+
+            while (true) {
+                stmt.setInt(1, id);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next() && rs.getInt(1) == 0) {
+                    return id;
+                }
+                id++;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al generar ID proyecto: " + e.getMessage());
+        }
+        return -1;
     }
-    
+
+    private int obtenerIdEmpresaPorNombre(String nombreEmpresa) {
+        try {
+            asegurarConexion();
+            String sql = "SELECT id_empresa FROM empresa WHERE nombre = ?";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setString(1, nombreEmpresa);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id_empresa");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al obtener id_empresa: " + e.getMessage());
+        }
+        return -1;
+    }
+
+    public boolean insertarProyecto(int idEmpresa) {
+        try {
+            asegurarConexion();
+
+            // Verificar existencia de empresa
+            String sqlVerificar = "SELECT COUNT(*) FROM empresa WHERE id_empresa = ?";
+            PreparedStatement stmtVerificar = conexion.prepareStatement(sqlVerificar);
+            stmtVerificar.setInt(1, idEmpresa);
+            ResultSet rsVerificar = stmtVerificar.executeQuery();
+            if (rsVerificar.next() && rsVerificar.getInt(1) == 0) {
+                return false;
+            }
+
+            // Generar ID si no está definido
+            if (this.id_proyecto <= 0) {
+                this.id_proyecto = generarSiguienteId();
+            }
+
+            // Insertar proyecto
+            String sql = "INSERT INTO proyecto (id_proyecto, titulo, descripcion, espacios, disponible, tipo, id_empresa) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setInt(1, this.id_proyecto);
+            stmt.setString(2, titulo);
+            stmt.setString(3, descripcion);
+            stmt.setInt(4, espacios);
+            stmt.setString(5, "Disponible");     // Valor por defecto
+            stmt.setString(6, "Anteproyecto");   // Valor por defecto
+            stmt.setInt(7, idEmpresa);
+
+            int filas = stmt.executeUpdate();
+            return filas > 0;
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public List<Proyecto> obtenerTodos(Empresa[] empresas, String campoOrden, boolean asc) {
+        List<Proyecto> lista = new java.util.ArrayList<>();
+        try {
+            asegurarConexion();
+            String sql = "SELECT * FROM proyecto ORDER BY " + campoOrden + (asc ? " ASC" : " DESC");
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Proyecto p = new Proyecto();
+                p.setId_proyecto(rs.getInt("id_proyecto"));
+                p.setTitulo(rs.getString("titulo"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setEspacios(rs.getInt("espacios"));
+                p.setDisponible(rs.getString("disponible"));
+                p.setTipo(rs.getString("tipo"));
+
+                int idEmpresa = rs.getInt("id_empresa");
+                Empresa empresaMatch = null;
+                for (Empresa e : empresas) {
+                    if (e.getId_empresa() == idEmpresa) {
+                        empresaMatch = e;
+                        break;
+                    }
+                }
+                p.setEmpresas(new Empresa[]{empresaMatch});
+                lista.add(p);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener proyectos: " + e.getMessage());
+        }
+
+        return lista;
+    }
+
+    public boolean eliminarProyecto(int id) {
+        try {
+            asegurarConexion();
+            String sql = "DELETE FROM proyecto WHERE id_proyecto = ?";
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+            stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar proyecto: " + e.getMessage());
+            return false;
+        }
+    }
+
 }
